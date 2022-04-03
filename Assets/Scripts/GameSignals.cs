@@ -5,12 +5,16 @@ using UnityEngine;
 public class GameSignals : MonoBehaviour
 {
 
+	bool isMuted = false;
+
 	public void Reset(){
 		print("Reset");
 	}
 
-	public void SetMute(bool isMuted){
-		print("SetMute" + isMuted);
+	public void ToggleMute(){
+		print("ToggleMute");
+		isMuted = !isMuted;
+		Camera.main.GetComponent<AudioSource>().mute = isMuted;
 	}
 
 	public void SetDifficulty(int difficulty){
