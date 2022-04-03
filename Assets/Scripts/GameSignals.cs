@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameSignals : MonoBehaviour
 {
-
+    public Transform stopwatch;
 	bool isMuted = false;
 
 	public void Reset(){

@@ -14,21 +14,22 @@ public class UnitSteering : MonoBehaviour
     {
         get
         {
-            return GetMaxSpeed();
+            return GetSteerForce();
         }
     }
 
-    private Vector3 _desiredVelocity = default;
-    private Vector3 _desiredAngularVelocity = default;
-    private Rigidbody _rb;
-    private Unit _unit;
-    private UnitLocomotion _unitLocomotion;
+    public Vector3 _desiredVelocity = default;
+    public Vector3 _desiredAngularVelocity = default;
+    public Rigidbody _rb;
+    public Unit _unit;
 
     [Header("Seek Target Steering Behaviour")]
     public Transform _seekTarget;
 
     [Header("Align With Target Steering Behaviour")]
     public Vector3 _lookDirection;
+
+    private Vector3 _moveDirection;
 
     public Vector3 SteeringForce()
     {
@@ -48,25 +49,32 @@ public class UnitSteering : MonoBehaviour
     private Vector3 SeekSteeringForce()
     {
         if (_seekTarget){
-            Vector3 direction = _seekTarget.position - GetCurrentGlobalPosition();
-            Vector3 desired = direction.normalized * GetMaxSpeed();
-            return desired;
+            Vector3 desiredDisplacement = _seekTarget.position - GetCurrentGlobalPosition();
+            Vector3 seekSteering = desiredDisplacement.normalized * GetSteerForce();
         }
         return Vector3.zero;
     }
+
+    private Vector3 RunSteeringForce(Vector3 desiredDirection)
+    {
+        return desiredDirection * GetSteerForce();
+    }
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         _unit = GetComponent<Unit>();
-        _unitLocomotion = GetComponent<UnitLocomotion>();      
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        _desiredVelocity = SeekSteeringForce();
+        Vector3 seekForce = SeekSteeringForce();
+        //TODO: Not sure if forward is right here, or if this even belongs in this class. Behaviour?
+        Vector3 runForwardForce = RunSteeringForce(Vector3.forward);
+        _desiredVelocity = seekForce + runForwardForce;
         _desiredAngularVelocity = Vector3.zero;
-        _unitLocomotion.SetSteerForce(SteeringForce());
-        _unitLocomotion.SetSteerTorque(SteeringTorque());
+        _unit.locomotion.SetSteerForce(SteeringForce());
+        _unit.locomotion.SetSteerTorque(SteeringTorque());
     }
 
     private Vector3 GetCurrentVelocity()
@@ -82,7 +90,7 @@ public class UnitSteering : MonoBehaviour
         return _rb.position;
     }
 
-    private float GetMaxSpeed()
+    private float GetSteerForce()
     {
         return _unit.stats.GetStat(UnitStats.RunSpeedId);
     }
