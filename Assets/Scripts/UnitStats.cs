@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName ="Unit/Stats")]
 public class UnitStats : ScriptableObject
 {
+    public int moveSpeed;
+    
     public const int HealthId = 0;
     public const int MaxHealthId = 1;
     public const int ArmorId = 2;
@@ -20,7 +23,7 @@ public class UnitStats : ScriptableObject
 	//6 - mass
 	public int GetBaseStat(int i){
         if (i == RunSpeedId)
-            return unitRules.moveSpeed;
+            return moveSpeed;
 		return i;
 	}
 

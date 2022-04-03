@@ -77,18 +77,24 @@ public class CameraController : MonoBehaviour
 	{
 		float currTime = Time.time;
 		float fillRatio = 0.0f;
-		for(int i = 0; i < cooldownImage.Count; i++){
-			if(!cooldownComplete[i]){
-				fillRatio = (currTime - prevClickTime[i])/cooldownDuration[i];
-				if(fillRatio > 1){
-					cooldownImage[i].fillAmount = 0.0f;
-					cooldownComplete[i] = true;
-				}
-				else{
-					cooldownImage[i].fillAmount = 1 - fillRatio;
-				}
-			}
-		}
+        if (cooldownImage != null) { 
+		    for(int i = 0; i < cooldownImage.Count; i++){
+			    if(!cooldownComplete[i]){
+				    fillRatio = (currTime - prevClickTime[i])/cooldownDuration[i];
+				    if(fillRatio > 1){
+					    cooldownImage[i].fillAmount = 0.0f;
+					    cooldownComplete[i] = true;
+				    }
+				    else{
+					    cooldownImage[i].fillAmount = 1 - fillRatio;
+				    }
+			    }
+		    }
+        }
+        else
+        {
+            print("CameraController: Cooldown Image Not Found");
+        }
 		if(Input.GetMouseButton(1)){
 			float deltaYaw = mouseSpeed * Input.GetAxis("Mouse X");
 			float deltaPitch = mouseSpeed * Input.GetAxis("Mouse Y");
@@ -113,10 +119,10 @@ public class CameraController : MonoBehaviour
 					SpawnUnit(0, pos, unitHeld);
 				}
 				else{
-					UnitStats stats = obj.GetComponent<UnitStats>();
-					if(stats){
+					Unit unit = obj.GetComponent<Unit>();
+					if(unit && unit.stats){
 						UnitStatsFiller usf = unitStatsHUD.GetComponent<UnitStatsFiller>();
-						usf.UpdateStats(stats);
+						usf.UpdateStats(unit.stats);
 						unitStatsHUD.transform.SetParent(obj.transform, false);
 						unitStatsHUD.gameObject.SetActive(true);
 					}
