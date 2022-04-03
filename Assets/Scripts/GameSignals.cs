@@ -4,20 +4,28 @@ using UnityEngine;
 
 public class GameSignals : MonoBehaviour
 {
+	int difficulty = 0;
 
-	bool isMuted = false;
+	public Stopwatch stopwatch;
+	public MuteToggle muteToggle;
 
 	public void Reset(){
 		print("Reset");
+		stopwatch.Begin();
+	}
+
+	public void GameOver(){
+		print("Game Over");
+		stopwatch.Stop();
 	}
 
 	public void ToggleMute(){
 		print("ToggleMute");
-		isMuted = !isMuted;
-		Camera.main.GetComponent<AudioSource>().mute = isMuted;
+		muteToggle.Toggle();
 	}
 
-	public void SetDifficulty(int difficulty){
-		print("SetDifficulty" + difficulty);
+	public void SetDifficulty(int d){
+		print("SetDifficulty" + d);
+		difficulty = d;
 	}
 }

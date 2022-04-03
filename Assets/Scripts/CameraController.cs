@@ -7,7 +7,12 @@ using UnityEngine.EventSystems;
 public class CameraController : MonoBehaviour
 {
 
-	float mouseSpeed = 2.0f;
+	public float mouseSpeed = 2.0f;
+	public float scrollSpeed = 3.0f;
+
+	public float zoomInLimit = -10;
+	public float zoomDefault = -100;
+	public float zoomOutLimit = -300;
 
 	public Canvas unitStatsHUD;
 	Canvas hudInstance;
@@ -66,47 +71,35 @@ public class CameraController : MonoBehaviour
 	void SetTarget(Transform emptyTarget){
 		transform.position = emptyTarget.position;
 		transform.rotation = emptyTarget.rotation;
+		Camera.main.transform.localPosition = new Vector3(0, 5, zoomDefault);
 	}
 
 	public void SetMode(int m){
 		SetTarget(cameraPoses[m]);
 	}
 
-	// Update is called once per frame
-	void Update()
-	{
-		float currTime = Time.time;
-		float fillRatio = 0.0f;
-        if (cooldownImage != null) { 
-		    for(int i = 0; i < cooldownImage.Count; i++){
-			    if(!cooldownComplete[i]){
-				    fillRatio = (currTime - prevClickTime[i])/cooldownDuration[i];
-				    if(fillRatio > 1){
-					    cooldownImage[i].fillAmount = 0.0f;
-					    cooldownComplete[i] = true;
-				    }
-				    else{
-					    cooldownImage[i].fillAmount = 1 - fillRatio;
-				    }
-			    }
-		    }
-        }
-        else
-        {
-            print("CameraController: Cooldown Image Not Found");
-        }
+	private void MouseRotate(){
 		if(Input.GetMouseButton(1)){
 			float deltaYaw = mouseSpeed * Input.GetAxis("Mouse X");
 			float deltaPitch = mouseSpeed * Input.GetAxis("Mouse Y");
 			Vector3 pivotPoint = Vector3.zero;
 			transform.RotateAround(pivotPoint, 
-						                     Vector3.up,
-						          		  	deltaYaw);
+											 Vector3.up,
+											deltaYaw);
 
-     		transform.RotateAround(pivotPoint, 
-		                                     transform.right,
-		                                     -deltaPitch);
+			transform.RotateAround(pivotPoint, 
+											 transform.right,
+											 -deltaPitch);
 		}
+	}
+
+	private void MouseZoom(){
+		float z = Camera.main.transform.localPosition.z + Input.mouseScrollDelta.y * scrollSpeed;
+		z = Mathf.Clamp(z, zoomOutLimit, zoomInLimit);
+		Camera.main.transform.localPosition = new Vector3(0, 5, z);
+	}
+
+	private void MouseRaycast(){
 		if(Input.GetMouseButtonDown(0)){
 			RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -132,5 +125,37 @@ public class CameraController : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	private void ManageCooldowns(){
+		float currTime = Time.time;
+		float fillRatio = 0.0f;
+		if (cooldownImage != null) { 
+			for(int i = 0; i < cooldownImage.Count; i++){
+				if(!cooldownComplete[i]){
+					fillRatio = (currTime - prevClickTime[i])/cooldownDuration[i];
+					if(fillRatio > 1){
+						cooldownImage[i].fillAmount = 0.0f;
+						cooldownComplete[i] = true;
+					}
+					else{
+						cooldownImage[i].fillAmount = 1 - fillRatio;
+					}
+				}
+			}
+		}
+		else
+		{
+			print("CameraController: Cooldown Image Not Found");
+		}
+	}
+
+	// Update is called once per frame
+	void Update()
+	{
+		ManageCooldowns();
+		MouseRotate();
+		MouseZoom();
+		MouseRaycast();
 	}
 }
