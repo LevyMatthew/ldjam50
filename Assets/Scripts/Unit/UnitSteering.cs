@@ -14,22 +14,22 @@ public class UnitSteering : MonoBehaviour
     {
         get
         {
-            return GetSteerForce();
+            return GetRunSpeed();
         }
     }
 
     public Vector3 _desiredVelocity = default;
     public Vector3 _desiredAngularVelocity = default;
-    public Rigidbody _rb;
-    public Unit _unit;
+    private Rigidbody _rb;
+    private Unit _unit;
 
     [Header("Seek Target Steering Behaviour")]
     public Transform _seekTarget;
 
     [Header("Align With Target Steering Behaviour")]
-    public Vector3 _lookDirection;
-
-    private Vector3 _moveDirection;
+    public Vector3 _desiredLookDirection;
+    public Vector3 _desiredRunDirection;
+    public Vector3 _constantDrivingTorque;
 
     public Vector3 SteeringForce()
     {
@@ -41,23 +41,45 @@ public class UnitSteering : MonoBehaviour
         //Steer angular motion, turning
         return _desiredAngularVelocity - GetCurrentAngularVelocity();
     }
+
     public void SetSeekTarget(Transform target)
     {
         _seekTarget = target;
     }
 
-    private Vector3 SeekSteeringForce()
+    public void SetRunDirection(Vector3 displacement)
     {
-        if (_seekTarget){
-            Vector3 desiredDisplacement = _seekTarget.position - GetCurrentGlobalPosition();
-            Vector3 seekSteering = desiredDisplacement.normalized * GetSteerForce();
-        }
-        return Vector3.zero;
+        Vector3 direction = displacement.normalized;
+        _desiredLookDirection = direction;
+        _desiredRunDirection = direction;
     }
 
-    private Vector3 RunSteeringForce(Vector3 desiredDirection)
+    public void SetConstantTorque(Vector3 torque)
     {
-        return desiredDirection * GetSteerForce();
+        _constantDrivingTorque = torque;
+    }
+
+
+    private Vector3 SeekSteeringForce()
+    {
+        Vector3 desiredDisplacement = Vector3.zero;
+        if (_seekTarget)
+            desiredDisplacement = _seekTarget.position - GetCurrentGlobalPosition();            
+        if (desiredDisplacement.sqrMagnitude < .5f)
+            return Vector3.zero ;
+        return desiredDisplacement.normalized * GetWalkSpeed();
+    }
+
+    private Vector3 RunSteeringForce()
+    {
+        return _desiredRunDirection * GetRunSpeed();
+    }
+
+
+    private Vector3 TurnSteeringTorque()
+    {
+        return _constantDrivingTorque;
+        //return Quaternion.FromToRotation(transform.forward, _desiredLookDirection).eulerAngles;
     }
 
     private void Awake()
@@ -70,9 +92,9 @@ public class UnitSteering : MonoBehaviour
     {
         Vector3 seekForce = SeekSteeringForce();
         //TODO: Not sure if forward is right here, or if this even belongs in this class. Behaviour?
-        Vector3 runForwardForce = RunSteeringForce(Vector3.forward);
+        Vector3 runForwardForce = RunSteeringForce();
         _desiredVelocity = seekForce + runForwardForce;
-        _desiredAngularVelocity = Vector3.zero;
+        _desiredAngularVelocity = TurnSteeringTorque();
         _unit.locomotion.SetSteerForce(SteeringForce());
         _unit.locomotion.SetSteerTorque(SteeringTorque());
     }
@@ -90,9 +112,14 @@ public class UnitSteering : MonoBehaviour
         return _rb.position;
     }
 
-    private float GetSteerForce()
+    private float GetRunSpeed()
     {
-        return _unit.stats.GetStat(UnitStats.RunSpeedId);
+        return _unit.stats.runSpeed;
+    }
+
+    private float GetWalkSpeed()
+    {
+        return _unit.stats.walkSpeed;
     }
 
 

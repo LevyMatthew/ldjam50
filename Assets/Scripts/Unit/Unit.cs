@@ -64,9 +64,13 @@ public class Unit : MonoBehaviour
         Vector3 sightInfluence = behaviours.ReactionToUnitSight(seenUnits, this);
         Vector3 thoughtInfluence = behaviours.ReactionToUnitKnowledge(knownUnits);
         Vector3 combatInfluence = behaviours.ReactionToUnitAttack(knownAttacks);
+        Vector3 forwardInfluence = behaviours.wanderBehaviour.forwardAffinity * transform.forward;
         
-        //TODO: Replace with steering calls
-        locomotion.SetSteerForce(sightInfluence * 10f);
+        Vector3 belligerenceRotationalInfluence = behaviours.combatBehaviour.belligerence * stats.attackSpeed * Vector3.up;
+
+        steering.SetRunDirection(sightInfluence + forwardInfluence);
+        steering.SetConstantTorque(belligerenceRotationalInfluence);
+        print("Unit is running in direction");
         //Check behaviour for current sight, and send to unit steering
     }
 
