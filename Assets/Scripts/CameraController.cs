@@ -8,8 +8,6 @@ public class CameraController : MonoBehaviour
 {
 
 	float mouseSpeed = 2.0f;
-	float xRot = 0.0f;
-	float yRot = 0.0f;
 
 	public Canvas unitStatsHUD;
 	Canvas hudInstance;
@@ -20,6 +18,9 @@ public class CameraController : MonoBehaviour
 	List<Button> shopButton;
 	[SerializeField]
 	List<float> cooldownDuration; //seconds
+
+	[SerializeField]
+	List<Transform> cameraPoses;
 
 	List<Image> cooldownImage;
 	List<float> prevClickTime;
@@ -62,6 +63,15 @@ public class CameraController : MonoBehaviour
 		}
 	}
 
+	void SetTarget(Transform emptyTarget){
+		transform.position = emptyTarget.position;
+		transform.rotation = emptyTarget.rotation;
+	}
+
+	public void SetMode(int m){
+		SetTarget(cameraPoses[m]);
+	}
+
 	// Update is called once per frame
 	void Update()
 	{
@@ -80,15 +90,18 @@ public class CameraController : MonoBehaviour
 			}
 		}
 		if(Input.GetMouseButton(1)){
-			float h = mouseSpeed * Input.GetAxis("Mouse X");
-			float v = mouseSpeed * Input.GetAxis("Mouse Y");
+			float deltaYaw = mouseSpeed * Input.GetAxis("Mouse X");
+			float deltaPitch = mouseSpeed * Input.GetAxis("Mouse Y");
+			Vector3 pivotPoint = Vector3.zero;
+			transform.RotateAround(pivotPoint, 
+						                     Vector3.up,
+						          		  	deltaYaw);
 
-			xRot += h;
-			yRot -= v;
-
-			transform.rotation = Quaternion.Euler(yRot, xRot, 0);
+     		transform.RotateAround(pivotPoint, 
+		                                     transform.right,
+		                                     -deltaPitch);
 		}
-		if(!EventSystem.current.IsPointerOverGameObject(-1) && Input.GetMouseButtonDown(0)){
+		if(Input.GetMouseButtonDown(0)){
 			RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			
@@ -101,7 +114,7 @@ public class CameraController : MonoBehaviour
 				}
 				else{
 					UnitStats stats = obj.GetComponent<UnitStats>();
-					if(stats){ //If we hit a model?
+					if(stats){
 						UnitStatsFiller usf = unitStatsHUD.GetComponent<UnitStatsFiller>();
 						usf.UpdateStats(stats);
 						unitStatsHUD.transform.SetParent(obj.transform, false);
