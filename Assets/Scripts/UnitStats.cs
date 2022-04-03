@@ -25,4 +25,8 @@ public class UnitStats : MonoBehaviour
 	public float GetMultiplier(int i){
 		return 1 + (i / 10f);
 	}
+
+	public string GetDescription(){
+		return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque bibendum felis rutrum, porta nibh sed, vestibulum risus. Etiam ut odio at nisi molestie pulvinar a fermentum tellus.";
+	}
 }
