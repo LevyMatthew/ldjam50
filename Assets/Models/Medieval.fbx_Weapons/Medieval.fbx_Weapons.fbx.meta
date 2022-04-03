@@ -2,7 +2,10 @@ fileFormatVersion: 2
 guid: 980b3b0e98f53984fb46c495df33541f
 ModelImporter:
   serializedVersion: 20200
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: -7994721063082333427
+    second: Sickle|SickleAction
   externalObjects: {}
   materials:
     materialImportMode: 2

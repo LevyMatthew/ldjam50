@@ -7,12 +7,13 @@ public class UnitSteering : MonoBehaviour
     //Path determination
     //Calculate a force direction (steering direction)
     //Literature: Steering Behaviors For Autonomous Characters, Craig W. Reynolds, 1999
-    public float maxSteerForce = 0.1f;    
+    public float maxSteerForce = 0.1f;   
+    public float maxSteerVelocity = 10f;
         
     private Vector3 _desiredVelocity = default;
     private Vector3 _desiredAngularVelocity = default;
     private Rigidbody _rb;
-    private UnitStats _unitStats;
+    private Unit _unit;
     private UnitLocomotion _unitLocomotion;
     public Transform _seekTarget;
 
@@ -43,7 +44,7 @@ public class UnitSteering : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _unitStats = GetComponent<UnitStats>();
+        _unit = GetComponent<Unit>();
         _unitLocomotion = GetComponent<UnitLocomotion>();      
     }
 
@@ -68,7 +69,7 @@ public class UnitSteering : MonoBehaviour
     }
     private float GetMaxSpeed()
     {
-        return _unitStats.GetStat(UnitStats.RunSpeedId);
+        return _unit.stats.GetStat(UnitStats.RunSpeedId);
     }
 
 

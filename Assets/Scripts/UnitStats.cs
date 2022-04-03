@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitStats : MonoBehaviour
+public class UnitStats : ScriptableObject
 {
-    public static int HealthId = 0;
-    public static int MaxHealthId = 1;
-    public static int ArmorId = 2;
-    public static int AttackDamageId = 3;
-    public static int AttackSpeedId = 4;
-    public static int RunSpeedId = 5;
-    public static int MassId = 6;
+    public const int HealthId = 0;
+    public const int MaxHealthId = 1;
+    public const int ArmorId = 2;
+    public const int AttackDamageId = 3;
+    public const int AttackSpeedId = 4;
+    public const int RunSpeedId = 5;
+    public const int MassId = 6;
 	//0 - health
 	//1 - max health
 	//2 - armor
@@ -19,6 +19,8 @@ public class UnitStats : MonoBehaviour
 	//5 - run speed
 	//6 - mass
 	public int GetBaseStat(int i){
+        if (i == RunSpeedId)
+            return unitRules.moveSpeed;
 		return i;
 	}
 
