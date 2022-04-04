@@ -20,6 +20,9 @@ public class Unit : MonoBehaviour
     private List<UnitAttackKnowledge> knownAttacks = new List<UnitAttackKnowledge>();
     private Rigidbody rb;
 
+    private float groundedThreshold = 0.1f;
+    private float outOfBoundsThreshold = -10.0f;
+
     private void Start()
     {
         locomotion = GetComponent<UnitLocomotion>();
@@ -34,6 +37,7 @@ public class Unit : MonoBehaviour
         Unit seenUnit = other.transform.GetComponent<Unit>();
         if (seenUnit){
             seenUnits.Add(seenUnit);
+            //print("I see a unit");
         }
     }
 
@@ -58,8 +62,16 @@ public class Unit : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (Time.frameCount % 100 == 0)
+        if (Time.frameCount % 10 == 0)
             RefreshBehaviour();
+    }
+
+    private bool IsGrounded(){
+        return transform.position.y <= groundedThreshold;
+    }
+
+    private bool OutOfBounds(){
+        return transform.position.y <= outOfBoundsThreshold;
     }
 
     public void RefreshBehaviour()
@@ -71,11 +83,20 @@ public class Unit : MonoBehaviour
         Vector3 centreInfluence = behaviours.wanderBehaviour.centreAffinity * -transform.position.normalized;
         
         Vector3 belligerenceRotationalInfluence = behaviours.combatBehaviour.belligerence * stats.attackSpeed * Vector3.up;
-
-        steering.SetRunDirection(sightInfluence + forwardInfluence + centreInfluence);
-        steering.SetConstantTorque(belligerenceRotationalInfluence);
-        print("Unit is running in direction");
-        //Check behaviour for current sight, and send to unit steering
+        if(OutOfBounds()){
+            Destroy(gameObject);
+        }
+        if(IsGrounded()){
+            steering.SetRunDirection(sightInfluence + forwardInfluence + centreInfluence);
+            steering.SetConstantTorque(belligerenceRotationalInfluence);
+            //print("Unit is running in direction");
+            //Check behaviour for current sight, and send to unit steering
+        }
+        else{
+            steering.SetRunDirection(Vector3.zero);
+            steering.SetConstantTorque(Vector3.zero);
+            //print("I'm in the air");
+        }
     }
 
 }

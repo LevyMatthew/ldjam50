@@ -18,6 +18,6 @@ MonoBehaviour:
     enemyUnitAffinity: 0
     enemyUnitAlignment: 0
     forwardAffinity: 0
-    centreAffinity: 0
+    centreAffinity: 1
   combatBehaviour:
     belligerence: 0

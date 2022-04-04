@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Enemy Scout Stats
   m_EditorClassIdentifier: 
   walkSpeed: 5
-  runSpeed: 60
+  runSpeed: 12
   maxHealth: 100
   armor: 50
   attackDamage: 10
   attackSpeed: 10000
-  mass: 5
+  mass: 1
   description: I'm a Scout. I'm very light so I can run fast. I have two axes.

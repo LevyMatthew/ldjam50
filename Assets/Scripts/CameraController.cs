@@ -16,6 +16,11 @@ public class CameraController : MonoBehaviour
 	public float zoomOutLimit = -300;
 
 	public Canvas unitStatsHUD;
+
+	bool cameraLocked = true;
+
+	Plane groundPlane = new Plane(new Vector3(0, 1, 0), new Vector3(0, 0, 0));
+
 	Canvas hudInstance;
 
 	[SerializeField]
@@ -32,6 +37,7 @@ public class CameraController : MonoBehaviour
 	List<float> prevClickTime;
 	List<bool> cooldownComplete;
 	int unitHeld = -1;
+	List<Image> frameImage;
 
 	// Start is called before the first frame update
 	void Start()
@@ -52,11 +58,19 @@ public class CameraController : MonoBehaviour
 	void SpawnUnit(int team, Vector3 location, int type){
 		// spawning allies
 		if(team == 0){
-			Instantiate(unitTemplate[type], location, Quaternion.identity);
+			if(type == 0){
+				Instantiate(unitTemplate[type], location, Quaternion.identity);
+			}
+			else if(type == 1){
+				Instantiate(unitTemplate[type], location, Quaternion.Euler(0, transform.eulerAngles.y + 180, 0));
+			}
+			else if(type == 2){
+				Instantiate(unitTemplate[type], location + new Vector3(0, 3f, 0), Quaternion.identity);
+			}
 			unitHeld = -1;
 		}
 		else{
-			print("Not Implemented: Spawn Enemy Unit");
+			//print("Not Implemented: Spawn Enemy Unit");
 		}
 	}
 
@@ -68,7 +82,7 @@ public class CameraController : MonoBehaviour
 			prevClickTime[id] = currTime;
 			cooldownComplete[id] = false;
 		}
-		print(unitHeld);
+		//print(unitHeld);
 	}
 
 	void SetTarget(Transform emptyTarget){
@@ -107,6 +121,9 @@ public class CameraController : MonoBehaviour
 			Vector3 rot = transform.eulerAngles;
 			transform.eulerAngles = new Vector3(-deltaPitch, deltaYaw, 0.0f) + rot;
 		}
+		else{
+			Cursor.lockState = CursorLockMode.None;
+		}
 	}
 
 	private void MouseZoom(){
@@ -116,16 +133,10 @@ public class CameraController : MonoBehaviour
 	}
 
 	private void MousePan(){
-		if(Input.GetMouseButton(1)){
-			Cursor.lockState = CursorLockMode.Locked;
-			float h = panSpeed * Input.GetAxis("Horizontal");
-			float v = panSpeed * Input.GetAxis("Vertical");
-			Vector3 pos = transform.localPosition;
-			transform.localPosition = transform.forward * v + transform.right * h + pos;
-		}
-		else{
-			Cursor.lockState = CursorLockMode.None;
-		}
+		float h = panSpeed * Input.GetAxis("Horizontal");
+		float v = panSpeed * Input.GetAxis("Vertical");
+		Vector3 pos = transform.localPosition;
+		transform.localPosition = transform.forward * v + transform.right * h + pos;
 	}
 
 	private void MouseRaycast(){
@@ -136,8 +147,7 @@ public class CameraController : MonoBehaviour
 				GameObject obj = hit.transform.gameObject;
 				Vector3 pos = hit.point;
 				float dist = Mathf.Sqrt(pos.x*pos.x + pos.z * pos.z);
-				print(dist);
-				if(unitHeld >= 0 && dist <= 35.0f){
+				if(unitHeld >= 0){
 					SpawnUnit(0, pos, unitHeld);
 				}
 				Unit unit = obj.GetComponent<Unit>();
@@ -153,6 +163,23 @@ public class CameraController : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	private void GroundRaycast(){
+        if (Input.GetMouseButton(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            float enter = 0.0f;
+
+            if (groundPlane.Raycast(ray, out enter))
+            {
+                //Get the point that is clicked
+                Vector3 hitPoint = ray.GetPoint(enter);
+                if(unitHeld >= 0){
+					SpawnUnit(0, hitPoint, unitHeld);
+				}
+            }
+        }
 	}
 
 	private void ManageCooldowns(){
@@ -178,14 +205,25 @@ public class CameraController : MonoBehaviour
 		}
 	}
 
+	public void SetLocked(bool locked){
+		if(locked){
+			Cursor.lockState = CursorLockMode.None;
+		}
+		cameraLocked = locked;
+	}
+
 	// Update is called once per frame
 	void Update()
 	{
 		ManageCooldowns();
+		if(cameraLocked){
+			return;
+		}
 		//MouseOrbit();
 		MouseRotate();
 		MousePan();
 		//MouseZoom();
-		MouseRaycast();
+		//MouseRaycast();
+		GroundRaycast();
 	}
 }

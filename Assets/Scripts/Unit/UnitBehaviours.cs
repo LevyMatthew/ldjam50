@@ -72,7 +72,7 @@ public class UnitBehaviours : ScriptableObject
     }
     public Vector3 ReactionToUnitAttack(List<UnitAttackKnowledge> attacks)
     {
-        Debug.Log("Reaction to combat not implemented yet");
+        //Debug.Log("Reaction to combat not implemented yet");
         return Vector3.zero;
     }
 

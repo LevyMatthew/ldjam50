@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Enemy Tank Stats
   m_EditorClassIdentifier: 
   walkSpeed: 5
-  runSpeed: 70
+  runSpeed: 20
   maxHealth: 100
-  armor: 80
-  attackDamage: 100
-  attackSpeed: 2000
-  mass: 100
-  description: Me Tank. Me swing club. Me big boy.
+  armor: 50
+  attackDamage: 10
+  attackSpeed: 10000
+  mass: 4
+  description: Me Tank. Me big. Me hit things with club.

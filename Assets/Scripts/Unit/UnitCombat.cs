@@ -9,15 +9,15 @@ public class UnitCombat : MonoBehaviour
 
     public void StartFight(Unit target)
     {
-        print("Start Fighting");
-        print(target);
+        //print("Start Fighting");
+        //print(target);
         //handA.AddTorque(Vector3.right * 100f);
         //handB.AddTorque(Vector3.right * 100f);
     }
 
     public void StopFight(Unit target)
     {
-        print("Stop Fighting");
+        //print("Stop Fighting");
         print(target);
        // handA.connectedBody.AddTorque(Vector3.right * -100f);
        // handB.connectedBody.AddTorque(Vector3.right * -100f);

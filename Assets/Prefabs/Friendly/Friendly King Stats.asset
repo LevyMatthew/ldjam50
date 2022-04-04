@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e357f8a5b36f3b44d8cef2541774c0a3, type: 3}
   m_Name: Friendly King Stats
   m_EditorClassIdentifier: 
-  walkSpeed: 0
-  runSpeed: 0
+  walkSpeed: 5
+  runSpeed: 35
   maxHealth: 100
   armor: 0
   attackDamage: 0
   attackSpeed: 0
-  mass: 50
+  mass: 3
   description: I am the King. My troops fight valiantly to defend me at all costs.

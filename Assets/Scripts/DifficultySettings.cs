@@ -14,5 +14,7 @@ public class DifficultySettings : ScriptableObject
     public float interval;
     [Range(0f,300f), Tooltip("Distance to spawn units from center of world")]
     public float radius;
+    [Range(0,1000), Tooltip("Maximum number of units that can exist at a time")]
+    public int spawnLimit;
 
 }

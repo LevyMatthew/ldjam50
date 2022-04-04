@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22f0f5687634f43468d6e2bb13dc76de, type: 3}
   m_Name: Easy
   m_EditorClassIdentifier: 
-  angleOffset: 0
+  angleOffset: 225
   angleRange: 90
-  interval: 5
-  radius: 100
+  interval: 2
+  radius: 150
+  spawnLimit: 100

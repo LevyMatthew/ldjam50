@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Enemy Tank Behaviour
   m_EditorClassIdentifier: 
   wanderBehaviour:
-    friendlyUnitAffinity: 0
+    friendlyUnitAffinity: 0.05
     friendlyUnitAlignment: 0
-    enemyUnitAffinity: 1
+    enemyUnitAffinity: 0
     enemyUnitAlignment: 0
-    forwardAffinity: 0.328
-    centreAffinity: 0.2
+    forwardAffinity: 0
+    centreAffinity: 1
   combatBehaviour:
-    belligerence: 0.2
+    belligerence: 0
