@@ -17,7 +17,7 @@ MonoBehaviour:
   maxHealth: 101
   armor: 50
   attackDamage: 10
-  attackSpeed: 32683
+  attackSpeed: 1000000
   mass: 5
   description: Hell I am a Scout. I run very fast. I have two axes and our names
     are all Zeke.

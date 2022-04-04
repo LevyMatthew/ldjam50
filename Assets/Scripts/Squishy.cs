@@ -12,8 +12,6 @@ public class Squishy : MonoBehaviour
     	unit.health -= weapon.damage;
     	heat += weapon.heat;
         usf.UpdateStats(unit);
-    	print("I am taking damage!!!");
-
     }
 
     void OnCollisionEnter(Collision collision)

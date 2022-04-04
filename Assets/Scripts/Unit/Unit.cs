@@ -34,7 +34,6 @@ public class Unit : MonoBehaviour
         Unit seenUnit = other.transform.GetComponent<Unit>();
         if (seenUnit){
             seenUnits.Add(seenUnit);
-            print("I see a unit");
         }
     }
 
