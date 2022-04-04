@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e357f8a5b36f3b44d8cef2541774c0a3, type: 3}
-  m_Name: Enemy Scout Stats
+  m_Name: Friendly Cavalry Stats
   m_EditorClassIdentifier: 
   walkSpeed: 5
-  runSpeed: 59
-  maxHealth: 101
+  runSpeed: 100
+  maxHealth: 100
   armor: 50
-  attackDamage: 10
-  attackSpeed: 32683
-  mass: 5
-  description: Hell I am a Scout. I run very fast. I have two axes and our names
-    are all Zeke.
+  attackDamage: 70
+  attackSpeed: 0
+  mass: 3
+  description: I am Cavalry. With my trusty steed, I ride with honor.

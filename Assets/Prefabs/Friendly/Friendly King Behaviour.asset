@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b1a26ab884f8ef4290d8a5618987337, type: 3}
-  m_Name: Friendly Tank Behaviour
+  m_Name: Friendly King Behaviour
   m_EditorClassIdentifier: 
   wanderBehaviour:
-    friendlyUnitAffinity: -0.171
+    friendlyUnitAffinity: 0
     friendlyUnitAlignment: 0
-    enemyUnitAffinity: 1
+    enemyUnitAffinity: 0
     enemyUnitAlignment: 0
-    forwardAffinity: 0.328
-    centreAffinity: -0.207
+    forwardAffinity: 0
+    centreAffinity: 0
   combatBehaviour:
-    belligerence: 1
+    belligerence: 0

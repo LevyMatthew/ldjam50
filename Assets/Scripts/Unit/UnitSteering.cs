@@ -66,7 +66,10 @@ public class UnitSteering : MonoBehaviour
         if (_seekTarget)
             desiredDisplacement = _seekTarget.position - GetCurrentGlobalPosition();            
         if (desiredDisplacement.sqrMagnitude < .5f)
+        {
+            print("Steering force zero");
             return Vector3.zero ;
+        }
         return desiredDisplacement.normalized * GetWalkSpeed();
     }
 

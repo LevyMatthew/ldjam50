@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a038cd99d4240e449a124a65ca9173f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 0
+  team: 1
   health: 0
   stats: {fileID: 11400000, guid: 55ec1f7dcda9a7849b4b5e95df834e61, type: 2}
   behaviours: {fileID: 11400000, guid: d205c884067f0c24aa8a7535091230d7, type: 2}

@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
 
 	public float mouseSpeed = 2.0f;
 	public float scrollSpeed = 3.0f;
+	public float panSpeed = 0.5f;
 
 	public float zoomInLimit = -10;
 	public float zoomDefault = -100;
@@ -45,6 +46,7 @@ public class CameraController : MonoBehaviour
 			cooldownComplete.Add(true);
 			cooldownImage[i].fillAmount = 0.0f;
 		}
+		SetMode(0);
 	}
 
 	void SpawnUnit(int team, Vector3 location, int type){
@@ -66,20 +68,22 @@ public class CameraController : MonoBehaviour
 			prevClickTime[id] = currTime;
 			cooldownComplete[id] = false;
 		}
+		print(unitHeld);
 	}
 
 	void SetTarget(Transform emptyTarget){
 		transform.position = emptyTarget.position;
 		transform.rotation = emptyTarget.rotation;
-		Camera.main.transform.localPosition = new Vector3(0, 5, zoomDefault);
 	}
 
 	public void SetMode(int m){
 		SetTarget(cameraPoses[m]);
 	}
 
-	private void MouseRotate(){
+	private void MouseOrbit(){
+		Vector3 pos = transform.position;
 		if(Input.GetMouseButton(1)){
+			Cursor.lockState = CursorLockMode.Locked;
 			float deltaYaw = mouseSpeed * Input.GetAxis("Mouse X");
 			float deltaPitch = mouseSpeed * Input.GetAxis("Mouse Y");
 			Vector3 pivotPoint = Vector3.zero;
@@ -91,6 +95,18 @@ public class CameraController : MonoBehaviour
 											 transform.right,
 											 -deltaPitch);
 		}
+		transform.position = pos;
+	}
+
+	private void MouseRotate(){
+		if(Input.GetMouseButton(1)){
+			Cursor.lockState = CursorLockMode.Locked;
+			float deltaYaw = mouseSpeed * Input.GetAxis("Mouse X");
+			float deltaPitch = mouseSpeed * Input.GetAxis("Mouse Y");
+
+			Vector3 rot = transform.eulerAngles;
+			transform.eulerAngles = new Vector3(-deltaPitch, deltaYaw, 0.0f) + rot;
+		}
 	}
 
 	private void MouseZoom(){
@@ -99,29 +115,41 @@ public class CameraController : MonoBehaviour
 		Camera.main.transform.localPosition = new Vector3(0, 5, z);
 	}
 
+	private void MousePan(){
+		if(Input.GetMouseButton(1)){
+			Cursor.lockState = CursorLockMode.Locked;
+			float h = panSpeed * Input.GetAxis("Horizontal");
+			float v = panSpeed * Input.GetAxis("Vertical");
+			Vector3 pos = transform.localPosition;
+			transform.localPosition = transform.forward * v + transform.right * h + pos;
+		}
+		else{
+			Cursor.lockState = CursorLockMode.None;
+		}
+	}
+
 	private void MouseRaycast(){
 		if(Input.GetMouseButtonDown(0)){
 			RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			
 			if (Physics.Raycast(ray, out hit)) {
 				GameObject obj = hit.transform.gameObject;
 				Vector3 pos = hit.point;
-				pos = new Vector3(pos.x, pos.y + 10, pos.z);
-				if(unitHeld >= 0){
+				float dist = Mathf.Sqrt(pos.x*pos.x + pos.z * pos.z);
+				print(dist);
+				if(unitHeld >= 0 && dist <= 35.0f){
 					SpawnUnit(0, pos, unitHeld);
 				}
+				Unit unit = obj.GetComponent<Unit>();
+				if(unit && unit.stats){
+					//UnitStatsFiller usf = unitStatsHUD.GetComponent<UnitStatsFiller>();
+					//usf.UpdateStats(unit);
+					//unitStatsHUD.transform.SetParent(obj.transform, false);
+					//unitStatsHUD.gameObject.SetActive(true);
+				}
 				else{
-					Unit unit = obj.GetComponent<Unit>();
-					if(unit && unit.stats){
-						UnitStatsFiller usf = unitStatsHUD.GetComponent<UnitStatsFiller>();
-						usf.UpdateStats(unit);
-						unitStatsHUD.transform.SetParent(obj.transform, false);
-						unitStatsHUD.gameObject.SetActive(true);
-					}
-					else{
-						unitStatsHUD.gameObject.SetActive(false);
-					}
+					//unitStatsHUD.gameObject.SetActive(false);
+					
 				}
 			}
 		}
@@ -154,8 +182,10 @@ public class CameraController : MonoBehaviour
 	void Update()
 	{
 		ManageCooldowns();
+		//MouseOrbit();
 		MouseRotate();
-		MouseZoom();
+		MousePan();
+		//MouseZoom();
 		MouseRaycast();
 	}
 }
