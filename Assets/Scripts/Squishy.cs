@@ -4,23 +4,23 @@ using UnityEngine;
 
 public class Squishy : MonoBehaviour
 {
-	int health = 10;
 	int heat = 25;
+    public Unit unit;
+    public UnitStatsFiller usf;
 
     void TakeDamage(Weapon weapon){
-    	health -= weapon.damage;
+    	unit.health -= weapon.damage;
     	heat += weapon.heat;
-    	print(health);
-    	print(heat);
+        usf.UpdateStats(unit);
+    	print("I am taking damage!!!");
+
     }
 
     void OnCollisionEnter(Collision collision)
     {
     	Weapon weapon = collision.gameObject.GetComponent<Weapon>();
     	if(weapon){
-	        if (collision.relativeVelocity.sqrMagnitude > 4){
-	            TakeDamage(weapon);
-	        }
+            TakeDamage(weapon);
 	    }
     }
 }

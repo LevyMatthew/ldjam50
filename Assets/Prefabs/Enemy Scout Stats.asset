@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e357f8a5b36f3b44d8cef2541774c0a3, type: 3}
-  m_Name: ScoutStats
+  m_Name: Enemy Scout Stats
   m_EditorClassIdentifier: 
-  walkSpeed: 9
-  runSpeed: 6
-  health: 100
-  maxHealth: 100
+  walkSpeed: 5
+  runSpeed: 59
+  maxHealth: 101
   armor: 50
   attackDamage: 10
-  attackSpeed: 1
+  attackSpeed: 32683
+  mass: 5
+  description: Hell I am a Scout. I run very fast. I have two axes and our names
+    are all Zeke.

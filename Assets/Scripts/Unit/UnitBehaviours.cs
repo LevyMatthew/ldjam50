@@ -19,6 +19,8 @@ public class UnitBehaviours : ScriptableObject
         public float enemyUnitAlignment;
         [Range(-1f, 1f),Tooltip("How much self wants to walk forward")]
         public float forwardAffinity;
+        [Range(-1f, 1f),Tooltip("How much self wants to walk towards origin")]
+        public float centreAffinity;
     }
 
     [Serializable]

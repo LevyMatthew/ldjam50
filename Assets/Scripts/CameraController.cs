@@ -115,7 +115,7 @@ public class CameraController : MonoBehaviour
 					Unit unit = obj.GetComponent<Unit>();
 					if(unit && unit.stats){
 						UnitStatsFiller usf = unitStatsHUD.GetComponent<UnitStatsFiller>();
-						usf.UpdateStats(unit.stats);
+						usf.UpdateStats(unit);
 						unitStatsHUD.transform.SetParent(obj.transform, false);
 						unitStatsHUD.gameObject.SetActive(true);
 					}

@@ -1413,13 +1413,7 @@ MonoBehaviour:
   attackDamageBase: {fileID: 4662086201508957513}
   attackSpeedBase: {fileID: 4662086201911690711}
   runSpeedBase: {fileID: 4662086203083081546}
-  weightBase: {fileID: 4662086202629292639}
-  healthMultiplier: {fileID: 4662086201930650459}
-  armorMultiplier: {fileID: 4662086201348585516}
-  attackDamageMultiplier: {fileID: 4662086203044980300}
-  attackSpeedMultiplier: {fileID: 4662086202765950841}
-  runSpeedMultiplier: {fileID: 4662086201785680164}
-  weightMultiplier: {fileID: 4662086202713260629}
+  massBase: {fileID: 4662086202629292639}
   description: {fileID: 3452673370070864239}
 --- !u!1 &4662086202359240680
 GameObject:
@@ -1563,7 +1557,7 @@ GameObject:
   - component: {fileID: 4662086202629292638}
   - component: {fileID: 4662086202629292639}
   m_Layer: 5
-  m_Name: Weight
+  m_Name: Mass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1697,7 +1691,7 @@ GameObject:
   - component: {fileID: 4662086202646702550}
   - component: {fileID: 4662086202646702551}
   m_Layer: 5
-  m_Name: Weight
+  m_Name: Mass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1837,7 +1831,7 @@ GameObject:
   - component: {fileID: 4662086202713260628}
   - component: {fileID: 4662086202713260629}
   m_Layer: 5
-  m_Name: Weight
+  m_Name: Mass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
