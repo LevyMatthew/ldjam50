@@ -40,7 +40,7 @@ BoxCollider:
   m_GameObject: {fileID: 87017241}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 2.662205, z: 1}
   m_Center: {x: 0, y: 0.8311025, z: 0}
@@ -117,7 +117,7 @@ BoxCollider:
   m_GameObject: {fileID: 1871438674}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 2.662205, z: 1}
   m_Center: {x: 0, y: 0.8311025, z: 0}
@@ -207,6 +207,8 @@ MonoBehaviour:
   behaviours: {fileID: 11400000, guid: db9d08f954f931345a4f02ef2e06c014, type: 2}
   abilities: {fileID: 0}
   intentions: {fileID: 0}
+  locomotion: {fileID: 0}
+  steering: {fileID: 0}
 --- !u!54 &831882903
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -264,6 +266,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSteerForce: 0.1
+  _desiredVelocity: {x: 0, y: 0, z: 0}
+  _desiredAngularVelocity: {x: 0, y: 0, z: 0}
   _seekTarget: {fileID: 0}
   _lookDirection: {x: 0, y: 0, z: 1}
 --- !u!114 &1935367941933725467
