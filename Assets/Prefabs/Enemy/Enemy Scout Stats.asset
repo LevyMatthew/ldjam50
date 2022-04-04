@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e357f8a5b36f3b44d8cef2541774c0a3, type: 3}
-  m_Name: Enemy Cavalry Stats
+  m_Name: Enemy Scout Stats
   m_EditorClassIdentifier: 
-  walkSpeed: 0
-  runSpeed: 0
-  maxHealth: 0
-  armor: 0
-  attackDamage: 0
-  attackSpeed: 0
-  mass: 0
-  description: 
+  walkSpeed: 5
+  runSpeed: 60
+  maxHealth: 100
+  armor: 50
+  attackDamage: 10
+  attackSpeed: 10000
+  mass: 5
+  description: I'm a Scout. I'm very light so I can run fast. I have two axes.

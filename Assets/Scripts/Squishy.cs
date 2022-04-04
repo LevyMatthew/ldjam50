@@ -9,6 +9,12 @@ public class Squishy : MonoBehaviour
     public UnitStatsFiller usf;
 
     void TakeDamage(Weapon weapon){
+        if(unit.team == UnitTeam.Player){
+            //launch this squishy towards castle
+        }
+        else{
+            
+        }
     	unit.health -= weapon.damage;
     	heat += weapon.heat;
         usf.UpdateStats(unit);
