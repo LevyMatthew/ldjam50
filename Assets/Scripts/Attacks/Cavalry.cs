@@ -23,6 +23,7 @@ public class Cavalry : MonoBehaviour
     	if(Time.time - startTime > duration){
     		Destroy(gameObject);
     	}
-    	rb.velocity = runSpeed * -transform.forward;
+    	Vector3 vel = runSpeed * -transform.forward;
+    	rb.velocity = new Vector3(vel.x, rb.velocity.y, vel.z);
     }
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Enemy Tank Stats
   m_EditorClassIdentifier: 
   walkSpeed: 5
-  runSpeed: 20
+  runSpeed: 7
   maxHealth: 100
   armor: 50
   attackDamage: 10

@@ -9,6 +9,7 @@ public class LoseCondition : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+    	Debug.Log("GameObject Hit: " + GetComponent<Collider>().gameObject.name);
     	Unit unit = collision.gameObject.GetComponent<Unit>();
     	if(unit){
             gs.GameOver();

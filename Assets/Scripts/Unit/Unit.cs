@@ -18,10 +18,10 @@ public class Unit : MonoBehaviour
     private List<Unit> seenUnits = new List<Unit>();
     private List<UnitSightingKnowledge> knownUnits = new List<UnitSightingKnowledge>();
     private List<UnitAttackKnowledge> knownAttacks = new List<UnitAttackKnowledge>();
+    private List<Collider> seenWalls = new List<Collider>();
     private Rigidbody rb;
 
     private float groundedThreshold = 0.1f;
-    private float outOfBoundsThreshold = -10.0f;
 
     private void Start()
     {
@@ -39,6 +39,12 @@ public class Unit : MonoBehaviour
             seenUnits.Add(seenUnit);
             //print("I see a unit");
         }
+
+        Wall seenWall = other.transform.GetComponent<Wall>();
+        if (seenWall){
+            seenWalls.Add(other);
+            print("I see a wall");
+        }
     }
 
     public void OnTriggerExit(Collider other)
@@ -46,6 +52,11 @@ public class Unit : MonoBehaviour
         Unit seenUnit = other.transform.GetComponent<Unit>();
         if (seenUnit){
             seenUnits.Remove(seenUnit);
+        }
+
+        Wall seenWall = other.transform.GetComponent<Wall>();
+        if (seenWall){
+            seenWalls.Remove(other);
         }
     }
 
@@ -70,10 +81,6 @@ public class Unit : MonoBehaviour
         return transform.position.y <= groundedThreshold;
     }
 
-    private bool OutOfBounds(){
-        return transform.position.y <= outOfBoundsThreshold;
-    }
-
     public void RefreshBehaviour()
     {
         Vector3 sightInfluence = behaviours.ReactionToUnitSight(seenUnits, this);
@@ -81,13 +88,12 @@ public class Unit : MonoBehaviour
         Vector3 combatInfluence = behaviours.ReactionToUnitAttack(knownAttacks);
         Vector3 forwardInfluence = behaviours.wanderBehaviour.forwardAffinity * transform.forward;
         Vector3 centreInfluence = behaviours.wanderBehaviour.centreAffinity * -transform.position.normalized;
+        Vector3 wallInfluence = behaviours.ReactionToWallSight(seenWalls, this);
         
-        Vector3 belligerenceRotationalInfluence = behaviours.combatBehaviour.belligerence * stats.attackSpeed * Vector3.up;
-        if(OutOfBounds()){
-            Destroy(gameObject);
-        }
+        Vector3 belligerenceRotationalInfluence = Vector3.zero; //TODO face forward
         if(IsGrounded()){
-            steering.SetRunDirection(sightInfluence + forwardInfluence + centreInfluence);
+            //steering.SetRunDirection(sightInfluence + forwardInfluence + centreInfluence - wallInfluence);
+            steering.SetRunDirection(centreInfluence + wallInfluence);
             steering.SetConstantTorque(belligerenceRotationalInfluence);
             //print("Unit is running in direction");
             //Check behaviour for current sight, and send to unit steering

@@ -21,6 +21,8 @@ public class UnitBehaviours : ScriptableObject
         public float forwardAffinity;
         [Range(-1f, 1f),Tooltip("How much self wants to walk towards origin")]
         public float centreAffinity;
+        [Range(-1f, 1f),Tooltip("How much self wants to walk towards walls")]
+        public float wallAffinity;
     }
 
     [Serializable]
@@ -34,7 +36,7 @@ public class UnitBehaviours : ScriptableObject
     public CombatBehaviour combatBehaviour;
    
 
-    public Vector3 ReactionToUnitSight(List<Unit>seenUnits, Unit seer)
+    public Vector3 ReactionToUnitSight(List<Unit> seenUnits, Unit seer)
     {
         Vector3 intendedMoveDirection = Vector3.zero;
         foreach (Unit u in seenUnits)
@@ -48,6 +50,21 @@ public class UnitBehaviours : ScriptableObject
                 sentiment = wanderBehaviour.friendlyUnitAffinity;
 
             Vector3 displacement = u.transform.position - seer.transform.position;
+            Vector3 sqrDirection = displacement / displacement.sqrMagnitude;
+            intendedMoveDirection += sqrDirection * sentiment;
+        }
+        return intendedMoveDirection;
+    }
+
+    public Vector3 ReactionToWallSight(List<Collider> seenWalls, Unit seer)
+    {
+        Vector3 intendedMoveDirection = Vector3.zero;
+        foreach (Collider c in seenWalls)
+        {
+            float sentiment;
+            sentiment = wanderBehaviour.wallAffinity;
+
+            Vector3 displacement = c.ClosestPoint(seer.transform.position) - seer.transform.position;
             Vector3 sqrDirection = displacement / displacement.sqrMagnitude;
             intendedMoveDirection += sqrDirection * sentiment;
         }
@@ -70,6 +87,7 @@ public class UnitBehaviours : ScriptableObject
         }
         return intendedMoveDirection;
     }
+
     public Vector3 ReactionToUnitAttack(List<UnitAttackKnowledge> attacks)
     {
         //Debug.Log("Reaction to combat not implemented yet");
