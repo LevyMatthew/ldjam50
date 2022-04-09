@@ -30,6 +30,7 @@ public class UnitSteering : MonoBehaviour
     public Vector3 _desiredLookDirection;
     public Vector3 _desiredRunDirection;
     public Vector3 _constantDrivingTorque;
+    public float _turningDirection;
 
     public Vector3 SteeringForce()
     {
@@ -52,6 +53,11 @@ public class UnitSteering : MonoBehaviour
         Vector3 direction = displacement.normalized;
         _desiredLookDirection = direction;
         _desiredRunDirection = direction;
+    }
+
+    public void SetTurningDirection(float right)
+    {
+        _turningDirection = right;
     }
 
     public void SetConstantTorque(Vector3 torque)
@@ -81,8 +87,7 @@ public class UnitSteering : MonoBehaviour
 
     private Vector3 TurnSteeringTorque()
     {
-        return _constantDrivingTorque;
-        //return Quaternion.FromToRotation(transform.forward, _desiredLookDirection).eulerAngles;
+        return _turningDirection * Vector3.up * GetTurnSpeed();
     }
 
     private void Awake()
@@ -123,6 +128,11 @@ public class UnitSteering : MonoBehaviour
     private float GetWalkSpeed()
     {
         return _unit.stats.walkSpeed;
+    }
+
+    private float GetTurnSpeed()
+    {
+        return _unit.stats.turnSpeed;
     }
 
 

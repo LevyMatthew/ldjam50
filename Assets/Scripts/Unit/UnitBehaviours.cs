@@ -23,6 +23,13 @@ public class UnitBehaviours : ScriptableObject
         public float centreAffinity;
         [Range(-1f, 1f),Tooltip("How much self wants to walk towards obstacles")]
         public float obstacleAffinity;
+        [Range(-1f, 1f),Tooltip("How much self wants to walk along surfaces of obstacles")]
+        public float obstacleSliding;
+        [Header("Rotation Affinities")]
+        [Range(-1f,1f),Tooltip("How much self wants to face where they're going")]
+        public float velocityAffinity;
+        [Range(-1f,1f),Tooltip("How much self wants to face seen obstacles")]
+        public float sightAffinity;
     }
 
     [Serializable]
@@ -56,20 +63,18 @@ public class UnitBehaviours : ScriptableObject
         return intendedMoveDirection;
     }
 
-    public Vector3 ReactionToObstacleSight(Dictionary<Transform, RaycastHit> seenObstacles)
+    public Vector3 ReactionToObstacleSight(Dictionary<Transform, RaycastHit> seenObstacles, Transform seer)
     {
         Vector3 intendedMoveDirection = Vector3.zero;
         foreach (var item in seenObstacles)
         {
-            float sentiment;
-            sentiment = wanderBehaviour.obstacleAffinity;
             Transform source = item.Key;
             RaycastHit hit = item.Value;
-            Vector3 projection = Vector3.Project(source.forward, hit.normal);
-            Vector3 rejection = source.forward - projection;
+            Vector3 projection = Vector3.Project(seer.forward, hit.normal);
+            Vector3 rejection = seer.forward - projection;
             float dist = hit.distance;
-            float importance = Mathf.Exp(-dist) * sentiment;
-            intendedMoveDirection += rejection * importance;
+            float importance = Mathf.Exp(-dist);
+            intendedMoveDirection += importance * (rejection * wanderBehaviour.obstacleSliding - hit.normal * wanderBehaviour.obstacleAffinity);
         }
         return intendedMoveDirection;
     }
@@ -95,6 +100,12 @@ public class UnitBehaviours : ScriptableObject
     {
         //Debug.Log("Reaction to combat not implemented yet");
         return Vector3.zero;
+    }
+
+    public float RotationReactionToMisalignment(Vector3 current, Vector3 target)
+    {
+        float angle = Vector3.SignedAngle(current, target, Vector3.up);
+        return angle;
     }
 
 

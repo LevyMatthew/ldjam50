@@ -7,6 +7,7 @@ public class UnitStats : ScriptableObject
 {
     public int walkSpeed;
     public int runSpeed;
+    public float turnSpeed;
     public int maxHealth;
     public int armor;
     public int attackDamage;

@@ -64,7 +64,7 @@ public class Unit : MonoBehaviour
         foreach(Transform source in raycastSources){
             RaycastHit hit;
             //if this source saw something
-            if (Physics.Raycast(source.position, source.forward, out hit, Mathf.Infinity, layerMask))
+            if (Physics.Raycast(source.position, source.forward, out hit, 100, layerMask))
             {
                 raycastHits[source] = hit;
                 Debug.DrawRay(source.position, source.forward * hit.distance, Color.yellow);
@@ -77,7 +77,7 @@ public class Unit : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (Time.frameCount % 10 == 0)
+        if (Time.frameCount % 5 == 0)
             RefreshSight();
         if (Time.frameCount % 10 == 0)
             RefreshBehaviour();
@@ -94,19 +94,21 @@ public class Unit : MonoBehaviour
         Vector3 combatInfluence = behaviours.ReactionToUnitAttack(knownAttacks);
         Vector3 forwardInfluence = behaviours.wanderBehaviour.forwardAffinity * transform.forward;
         Vector3 centreInfluence = behaviours.wanderBehaviour.centreAffinity * -transform.position.normalized;
-        Vector3 obstacleInfluence = behaviours.ReactionToObstacleSight(raycastHits);
+        Vector3 obstacleInfluence = behaviours.ReactionToObstacleSight(raycastHits, transform);
         
-        Vector3 belligerenceRotationalInfluence = Vector3.zero; //TODO face forward
+        //positive to turn left, negative to turn right
+        float rotationInfluence = behaviours.RotationReactionToMisalignment(transform.forward, rb.velocity);
+        print(rotationInfluence);
         if(IsGrounded()){
             //steering.SetRunDirection(sightInfluence + forwardInfluence + centreInfluence + wallInfluence);
             steering.SetRunDirection(centreInfluence + obstacleInfluence);
-            steering.SetConstantTorque(belligerenceRotationalInfluence);
+            steering.SetTurningDirection(rotationInfluence);
             //print("Unit is running in direction");
             //Check behaviour for current sight, and send to unit steering
         }
         else{
             steering.SetRunDirection(Vector3.zero);
-            steering.SetConstantTorque(Vector3.zero);
+            steering.SetTurningDirection(0);
             //print("I'm in the air");
         }
     }

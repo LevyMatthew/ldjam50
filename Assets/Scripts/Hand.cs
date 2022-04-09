@@ -64,7 +64,7 @@ public class Hand : MonoBehaviour
 			Instantiate(entityTemplate[type], location + new Vector3(0, 3f, 0), Quaternion.identity);
 		}
 		else if(type == 3){
-			Instantiate(entityTemplate[type], location + new Vector3(0, 3f, 0), Quaternion.identity);
+			Instantiate(entityTemplate[type], location + new Vector3(0, 3f, 0), Quaternion.Euler(0, Camera.main.transform.eulerAngles.y + 180, 0));
 		}
 		entityHeld = -1;
 	}

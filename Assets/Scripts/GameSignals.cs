@@ -16,7 +16,6 @@ public class GameSignals : MonoBehaviour
 	bool isGameOver = false;
 
 	public void Reset(){
-		print("Reset");
 		isGameOver = false;
 		//gameOverMenu.SetActive(false);
 		foreach (Unit u in Object.FindObjectsOfType<Unit>()) {
@@ -41,7 +40,6 @@ public class GameSignals : MonoBehaviour
 			return;
 		}
 		isGameOver = true;
-		print("Game Over");
 		stopwatch.Stop();
 		gameOverMenu.SetActive(true);
 		unitSpawner.gameObject.SetActive(false);
@@ -52,17 +50,14 @@ public class GameSignals : MonoBehaviour
 	}
 
 	public void ToggleMute(){
-		print("ToggleMute");
 		muteToggle.Toggle();
 	}
 
 	public void SetDifficulty(int d){
-		print("SetDifficulty" + d);
 		unitSpawner.SetDifficulty(d);
 	}
 
 	public void QuitGame(){
-		print("Quit");
 		Application.Quit();
 	}
 }
