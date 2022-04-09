@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: Enemy Scout Behaviour
   m_EditorClassIdentifier: 
   wanderBehaviour:
-    friendlyUnitAffinity: 0.5
+    friendlyUnitAffinity: -0.1
     friendlyUnitAlignment: 0
-    enemyUnitAffinity: 0
+    enemyUnitAffinity: 0.8
     enemyUnitAlignment: 0
     forwardAffinity: 0
-    centreAffinity: 1
+    centreAffinity: 0.5
+    wallAffinity: -1
   combatBehaviour:
     belligerence: 0

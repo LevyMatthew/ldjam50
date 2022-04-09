@@ -15,7 +15,7 @@ MonoBehaviour:
   wanderBehaviour:
     friendlyUnitAffinity: 0
     friendlyUnitAlignment: 0
-    enemyUnitAffinity: 1
+    enemyUnitAffinity: 0
     enemyUnitAlignment: 0
     forwardAffinity: 0
     centreAffinity: 0

@@ -20,7 +20,7 @@ public class GameSignals : MonoBehaviour
 		isGameOver = false;
 		//gameOverMenu.SetActive(false);
 		foreach (Unit u in Object.FindObjectsOfType<Unit>()) {
-			if(!u.name.Equals("Friendly King Unit")){
+			if(!u.name.Equals("Friendly King Unit") && !u.name.StartsWith("Friendly Scout Unit")){
             	u.gameObject.SetActive(false);
             }
         }
