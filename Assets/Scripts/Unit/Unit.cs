@@ -97,16 +97,18 @@ public class Unit : MonoBehaviour
         Vector3 obstacleInfluence = behaviours.ReactionToObstacleSight(raycastHits, transform);
         
         Vector3 intendedMoveDirection = sightInfluence
+            + thoughtInfluence
+            + combatInfluence
+            + forwardInfluence
             + centreInfluence 
-            + obstacleInfluence
-            + forwardInfluence ;
+            + obstacleInfluence;
 
         //positive to turn left, negative to turn right
         float turnInfluence = behaviours.wanderBehaviour.velocityAffinity
             * Vector3.SignedAngle(intendedMoveDirection, transform.forward, Vector3.up);
         
         if(IsGrounded()){
-            steering.SetRunDirection(centreInfluence + obstacleInfluence);
+            steering.SetRunDirection(intendedMoveDirection);
             steering.SetTurningDirection(turnInfluence);
         }
         else{

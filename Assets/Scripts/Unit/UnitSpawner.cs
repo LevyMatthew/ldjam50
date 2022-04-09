@@ -13,10 +13,7 @@ public class UnitSpawner : MonoBehaviour
 	int totalSpawns = 0;
 
 	private void Spawn(){
-		int unitID = 0;
-		if(Random.Range(0.0f, 1.0f) >= 0.7){
-			unitID = 0;
-		}
+		int unitID = 0; //TODO: Random sampling from set
 		Quaternion rotation = Quaternion.Euler(0, Random.Range(difficulty.angleOffset, difficulty.angleOffset + difficulty.angleRange), 0);
 		Vector3 position = rotation * (Vector3.right * difficulty.radius);
 		Instantiate(units[unitID], position, Quaternion.identity);
