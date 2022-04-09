@@ -63,6 +63,9 @@ public class Hand : MonoBehaviour
 		else if(type == 2){
 			Instantiate(entityTemplate[type], location + new Vector3(0, 3f, 0), Quaternion.identity);
 		}
+		else if(type == 3){
+			Instantiate(entityTemplate[type], location + new Vector3(0, 3f, 0), Quaternion.identity);
+		}
 		entityHeld = -1;
 	}
 

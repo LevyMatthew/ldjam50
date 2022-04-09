@@ -15,7 +15,7 @@ public class UnitSpawner : MonoBehaviour
 	private void Spawn(){
 		int unitID = 0;
 		if(Random.Range(0.0f, 1.0f) >= 0.7){
-			unitID = 1;
+			unitID = 0;
 		}
 		Quaternion rotation = Quaternion.Euler(0, Random.Range(difficulty.angleOffset, difficulty.angleOffset + difficulty.angleRange), 0);
 		Vector3 position = rotation * (Vector3.right * difficulty.radius);

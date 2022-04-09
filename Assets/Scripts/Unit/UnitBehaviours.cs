@@ -21,8 +21,8 @@ public class UnitBehaviours : ScriptableObject
         public float forwardAffinity;
         [Range(-1f, 1f),Tooltip("How much self wants to walk towards origin")]
         public float centreAffinity;
-        [Range(-1f, 1f),Tooltip("How much self wants to walk towards walls")]
-        public float wallAffinity;
+        [Range(-1f, 1f),Tooltip("How much self wants to walk towards obstacles")]
+        public float obstacleAffinity;
     }
 
     [Serializable]
@@ -56,17 +56,20 @@ public class UnitBehaviours : ScriptableObject
         return intendedMoveDirection;
     }
 
-    public Vector3 ReactionToWallSight(List<Collider> seenWalls, Unit seer)
+    public Vector3 ReactionToObstacleSight(Dictionary<Transform, RaycastHit> seenObstacles)
     {
         Vector3 intendedMoveDirection = Vector3.zero;
-        foreach (Collider c in seenWalls)
+        foreach (var item in seenObstacles)
         {
             float sentiment;
-            sentiment = wanderBehaviour.wallAffinity;
-
-            Vector3 displacement = c.ClosestPoint(seer.transform.position) - seer.transform.position;
-            Vector3 sqrDirection = displacement / displacement.sqrMagnitude;
-            intendedMoveDirection += sqrDirection * sentiment;
+            sentiment = wanderBehaviour.obstacleAffinity;
+            Transform source = item.Key;
+            RaycastHit hit = item.Value;
+            Vector3 projection = Vector3.Project(source.forward, hit.normal);
+            Vector3 rejection = source.forward - projection;
+            float dist = hit.distance;
+            float importance = Mathf.Exp(-dist) * sentiment;
+            intendedMoveDirection += rejection * importance;
         }
         return intendedMoveDirection;
     }
