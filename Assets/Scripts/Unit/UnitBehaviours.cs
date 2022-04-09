@@ -101,14 +101,6 @@ public class UnitBehaviours : ScriptableObject
         //Debug.Log("Reaction to combat not implemented yet");
         return Vector3.zero;
     }
-
-    public float RotationReactionToMisalignment(Vector3 current, Vector3 target)
-    {
-        float angle = Vector3.SignedAngle(current, target, Vector3.up);
-        return angle;
-    }
-
-
 }
 
 public struct UnitSightingKnowledge

@@ -96,15 +96,18 @@ public class Unit : MonoBehaviour
         Vector3 centreInfluence = behaviours.wanderBehaviour.centreAffinity * -transform.position.normalized;
         Vector3 obstacleInfluence = behaviours.ReactionToObstacleSight(raycastHits, transform);
         
+        Vector3 intendedMoveDirection = sightInfluence
+            + centreInfluence 
+            + obstacleInfluence
+            + forwardInfluence ;
+
         //positive to turn left, negative to turn right
-        float rotationInfluence = behaviours.RotationReactionToMisalignment(transform.forward, rb.velocity);
-        print(rotationInfluence);
+        float turnInfluence = behaviours.wanderBehaviour.velocityAffinity
+            * Vector3.SignedAngle(intendedMoveDirection, transform.forward, Vector3.up);
+        
         if(IsGrounded()){
-            //steering.SetRunDirection(sightInfluence + forwardInfluence + centreInfluence + wallInfluence);
             steering.SetRunDirection(centreInfluence + obstacleInfluence);
-            steering.SetTurningDirection(rotationInfluence);
-            //print("Unit is running in direction");
-            //Check behaviour for current sight, and send to unit steering
+            steering.SetTurningDirection(turnInfluence);
         }
         else{
             steering.SetRunDirection(Vector3.zero);
