@@ -25,6 +25,8 @@ public class Unit : MonoBehaviour
 
     private Rigidbody rb;
 
+    public Texture2D mapTexture;
+
     private float groundedThreshold = 0.1f;
 
     private void Start()
@@ -37,7 +39,7 @@ public class Unit : MonoBehaviour
         health = stats.maxHealth;
     }
 
-    public void OnTriggerEnter(Collider other)
+    /*public void OnTriggerEnter(Collider other)
     {
         Unit seenUnit = other.transform.GetComponent<Unit>();
         if (seenUnit){
@@ -57,7 +59,7 @@ public class Unit : MonoBehaviour
     public void OnCollisionEnter(Collision collision)
     {
         //Do something to build up the known Attacks
-    }
+    }*/
 
     public void RefreshSight()
     {
@@ -77,9 +79,9 @@ public class Unit : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (Time.frameCount % 5 == 0)
-            RefreshSight();
-        if (Time.frameCount % 10 == 0)
+        //if (Time.frameCount % 5 == 0)
+            //RefreshSight();
+        if (Time.frameCount % 1 == 0)
             RefreshBehaviour();
     }
 
@@ -89,32 +91,38 @@ public class Unit : MonoBehaviour
 
     public void RefreshBehaviour()
     {
-        Vector3 sightInfluence = behaviours.ReactionToUnitSight(seenUnits, this);
-        Vector3 thoughtInfluence = behaviours.ReactionToUnitKnowledge(knownUnits);
-        Vector3 combatInfluence = behaviours.ReactionToUnitAttack(knownAttacks);
-        Vector3 forwardInfluence = behaviours.wanderBehaviour.forwardAffinity * transform.forward;
+        //Vector3 sightInfluence = behaviours.ReactionToUnitSight(seenUnits, this);
+        //Vector3 thoughtInfluence = behaviours.ReactionToUnitKnowledge(knownUnits);
+        //Vector3 combatInfluence = behaviours.ReactionToUnitAttack(knownAttacks);
+        //Vector3 forwardInfluence = behaviours.wanderBehaviour.forwardAffinity * transform.forward;
         Vector3 centreInfluence = behaviours.wanderBehaviour.centreAffinity * -transform.position.normalized;
-        Vector3 obstacleInfluence = behaviours.ReactionToObstacleSight(raycastHits, transform);
-        
-        Vector3 intendedMoveDirection = sightInfluence
-            + thoughtInfluence
-            + combatInfluence
-            + forwardInfluence
-            + centreInfluence 
-            + obstacleInfluence;
+        //Vector3 obstacleInfluence = behaviours.ReactionToObstacleSight(raycastHits, transform);
+        Vector3 mapInfluence = behaviours.ReactionToMap(this);
+
+        Vector3 intendedMoveDirection = centreInfluence + mapInfluence;//sightInfluence
+            //+ thoughtInfluence
+            //+ combatInfluence
+            //+ forwardInfluence
+            //+ centreInfluence 
+            //+ obstacleInfluence;
 
         //positive to turn left, negative to turn right
-        float turnInfluence = behaviours.wanderBehaviour.velocityAffinity
-            * Vector3.SignedAngle(intendedMoveDirection, transform.forward, Vector3.up);
-        
-        if(IsGrounded()){
+        //float turnInfluence = behaviours.wanderBehaviour.velocityAffinity
+            //* Vector3.SignedAngle(intendedMoveDirection, transform.forward, Vector3.up);
+
+        //Set a debug vector = intendedMoveDirection of a specific color so you can see it in scene view
+        Debug.DrawLine(transform.position, transform.position + intendedMoveDirection, Color.red, 0.5f);
+
+        if (IsGrounded()){
+            //# SetRunDirection(intendedMoveDirection);
+            //rb.velocity = intendedMoveDirection * stats.runSpeed;
             steering.SetRunDirection(intendedMoveDirection);
-            steering.SetTurningDirection(turnInfluence);
+            if (centreInfluence != Vector3.zero)
+            {
+                rb.rotation = Quaternion.LookRotation(new Vector3(-centreInfluence.x, 0, -centreInfluence.z), Vector3.up);
+            }
         }
         else{
-            steering.SetRunDirection(Vector3.zero);
-            steering.SetTurningDirection(0);
-            //print("I'm in the air");
         }
     }
 

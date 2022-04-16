@@ -4,15 +4,34 @@ using UnityEngine;
 
 public class LoseCondition : MonoBehaviour
 {
+	private bool isGameOver = false;
 
-	public GameSignals gs;
+    private void Start()
+    {
+        EventManager.TransitionEvent += OnTransition;
+    }
+
+    private void OnTransition(int t)
+    {
+        // starting the game
+        if(t == 2)
+        {
+            isGameOver = false;
+        }
+    }
 
     void OnCollisionEnter(Collision collision)
     {
-    	Debug.Log("GameObject Hit: " + GetComponent<Collider>().gameObject.name);
+        string name = collision.gameObject.name;
     	Unit unit = collision.gameObject.GetComponent<Unit>();
-    	if(unit){
-            gs.GameOver();
+    	if(unit && !isGameOver && name.StartsWith("Enemy")){
+            EventManager.StartTransitionEvent(3);
+    		isGameOver = true;
 	    }
+    }
+
+    private void OnDisable()
+    {
+        EventManager.TransitionEvent -= OnTransition;
     }
 }

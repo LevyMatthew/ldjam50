@@ -25,6 +25,8 @@ public class UnitBehaviours : ScriptableObject
         public float obstacleAffinity;
         [Range(-1f, 1f),Tooltip("How much self wants to walk along surfaces of obstacles")]
         public float obstacleSliding;
+        [Range(-1f, 1f), Tooltip("How much self wants to follow the map")]
+        public float mapAffinity;
         [Header("Rotation Affinities")]
         [Range(-1f,1f),Tooltip("How much self wants to face where they're going")]
         public float velocityAffinity;
@@ -94,6 +96,40 @@ public class UnitBehaviours : ScriptableObject
             intendedMoveDirection += sqrDirection * sentiment;
         }
         return intendedMoveDirection;
+    }
+
+    public Vector3 ReactionToMap(Unit seer)
+    {
+        Vector3 intendedMoveDirection = Vector3.zero;
+        float sentiment = wanderBehaviour.mapAffinity;
+        //Color color = seer.mapTexture.GetPixel((int)(seer.transform.position.x), (int)(seer.transform.position.z));
+        float angle = Mathf.Atan2(seer.transform.position.z, seer.transform.position.x);
+        float deg = angle * 180f / Mathf.PI;
+        Vector3 a = -seer.transform.right;
+        Vector3 b = seer.transform.right;
+        float t;
+
+        if (deg >= 0 && deg <= 60)
+        {
+            t = (deg - 0f) / 60f;
+            intendedMoveDirection = Vector3.Lerp(a, b, t);
+        }
+        else if (deg >= 60 && deg <= 120)
+        {
+            t = (deg - 60f) / 60f;
+            intendedMoveDirection = Vector3.Lerp(a, b, t);
+        }
+        else if (deg >= 120 && deg <= 180)
+        {
+            t = (deg - 120f) / 60f;
+            intendedMoveDirection = Vector3.Lerp(a, b, t);
+        }
+
+        //units care more about the doors as they get closer to the centre
+        float dist = seer.transform.position.magnitude;
+        sentiment *= Mathf.Lerp(1f, 0, (dist - 50f) / 100f);
+
+        return intendedMoveDirection * sentiment;
     }
 
     public Vector3 ReactionToUnitAttack(List<UnitAttackKnowledge> attacks)

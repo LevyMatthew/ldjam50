@@ -12,16 +12,15 @@ public class Hand : MonoBehaviour
 	[SerializeField]
 	List<GameObject> entityTemplate;
 	[SerializeField]
-	List<Button> shopButton;
-	[SerializeField]
 	List<float> cooldownDuration; //seconds
 	Unit hoveredUnit; // the unit being hovered over
 	Unit selectedUnit; // the unit that has been selected with left click
-	
-	List<Image> cooldownImage;
+
+    [SerializeField]
+    List<Image> cooldownImage;
+
 	List<float> prevClickTime;
 	List<bool> cooldownComplete;
-	int entityHeld = -1;
 	List<Image> frameImage;
 
 	GameObject statsGameObject;
@@ -29,11 +28,9 @@ public class Hand : MonoBehaviour
 
 	void Start()
 	{
-		cooldownImage = new List<Image>();
 		prevClickTime = new List<float>();
 		cooldownComplete = new List<bool>();
-		for(int i = 0; i < shopButton.Count; i++){
-			cooldownImage.Add(shopButton[i].transform.GetChild(0).GetComponent<Image>());
+		for(int i = 0; i < cooldownImage.Count; i++){
 			prevClickTime.Add(0.0f);
 			cooldownComplete.Add(true);
 			cooldownImage[i].fillAmount = 0.0f;
@@ -66,16 +63,15 @@ public class Hand : MonoBehaviour
 		else if(type == 3){
 			Instantiate(entityTemplate[type], location + new Vector3(0, 3f, 0), Quaternion.Euler(0, Camera.main.transform.eulerAngles.y + 180, 0));
 		}
-		entityHeld = -1;
 	}
 
-	public void OnClick(int id){
+	public void TryUseAbility(int id){
 		float currTime = Time.time;
 		if(cooldownComplete[id]){
-			entityHeld = id;
 			cooldownImage[id].fillAmount = 1f;
 			prevClickTime[id] = currTime;
-			cooldownComplete[id] = false;
+            SpawnEntity(groundPos, id);
+            cooldownComplete[id] = false;
 		}
 	}
 
@@ -96,10 +92,6 @@ public class Hand : MonoBehaviour
 				}
 			}
 		}
-		else
-		{
-			print("CameraController: Cooldown Image Not Found");
-		}
 	}
 
 	private bool MouseOverMenu(){
@@ -113,14 +105,18 @@ public class Hand : MonoBehaviour
 		if(groundPos.y != -1){
 			// move the hand to the raycast point on the ground
 			transform.position = groundPos;
-			// left click
-			if(Input.GetMouseButtonDown(0) && !MouseOverMenu()){
-				if(entityHeld >= 0){
-					SpawnEntity(groundPos, entityHeld);
-					//print(entityHeld);
-					//print(groundPos);
-				}
-			}
-		}
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                TryUseAbility(0);
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                TryUseAbility(1);
+            }
+            else if (Input.GetKeyDown(KeyCode.R))
+            {
+                TryUseAbility(2);
+            }
+        }
 	}
 }

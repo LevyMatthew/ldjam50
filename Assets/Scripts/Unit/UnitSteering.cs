@@ -5,7 +5,7 @@ using UnityEngine;
 public class UnitSteering : MonoBehaviour
 {
     //Path determination
-    //Calculate force required to change current velocity to match desired  (steering direction)  
+    //Calculate a force direction (steering direction)
     //Literature: Steering Behaviors For Autonomous Characters, Craig W. Reynolds, 1999
     
     public float maxSteerForce = 0.1f;

@@ -11,18 +11,33 @@ public class Stopwatch : MonoBehaviour
 	bool running = false;
 	public TextMeshProUGUI label;
 
-	public void Begin(){
+	void Start(){
+		EventManager.TransitionEvent += SetGameMode;
+	}
+
+	private void SetGameMode(int m){
+		//play game, start timer
+		if(m == 2){
+			Begin();
+		}
+		//game over, stop timer
+		else if(m == 3){
+			Stop();
+		}
+	}
+
+	private void Begin(){
 		running = true;
 		startTime = Time.time;
 	}
 
-	public void Stop(){
+	private void Stop(){
 		running = false;
 		finalTime = GetTime();
 		DisplayTime(finalTime);
 	}
 
-	public float GetTime(){
+	private float GetTime(){
 		return Time.time - startTime;
 	}
 
@@ -36,5 +51,9 @@ public class Stopwatch : MonoBehaviour
 		if(running){
 			DisplayTime(GetTime());
 	 	}
+	}
+
+	private void OnDisable(){
+		EventManager.TransitionEvent -= SetGameMode;
 	}
 }

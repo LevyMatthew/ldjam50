@@ -18,9 +18,10 @@ MonoBehaviour:
     enemyUnitAffinity: 0
     enemyUnitAlignment: 0
     forwardAffinity: 0
-    centreAffinity: 0
+    centreAffinity: 0.9
     obstacleAffinity: 0
     obstacleSliding: 0
+    mapAffinity: 1
     velocityAffinity: 0
     sightAffinity: 0
   combatBehaviour:

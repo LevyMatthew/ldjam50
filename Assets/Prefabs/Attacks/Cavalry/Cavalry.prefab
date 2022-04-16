@@ -1042,6 +1042,7 @@ GameObject:
   - component: {fileID: 7128820685306506743}
   - component: {fileID: 7476262058509013944}
   - component: {fileID: 7943311654906595801}
+  - component: {fileID: 9052998596045115979}
   m_Layer: 0
   m_Name: Cavalry
   m_TagString: Untagged
@@ -1131,6 +1132,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 331fa3054b3de3448b00ca19db372aec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9052998596045115979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3859907199607577705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71dfe8e255a12df4a853456062a5a407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4032105444801516186

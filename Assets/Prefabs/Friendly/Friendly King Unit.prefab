@@ -122,6 +122,11 @@ MonoBehaviour:
   intentions: {fileID: 0}
   locomotion: {fileID: 1935367941933725467}
   steering: {fileID: 3594545613993217981}
+  raycastSources: []
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  mapTexture: {fileID: 0}
 --- !u!54 &831882903
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -148,10 +153,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1.9
+  m_Radius: 0.36357635
+  m_Height: 2.2720647
   m_Direction: 1
-  m_Center: {x: 0, y: 0.66, z: 0}
+  m_Center: {x: 0, y: 1.0692708, z: 0.03720647}
 --- !u!135 &2838121716134814678
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -161,7 +166,7 @@ SphereCollider:
   m_GameObject: {fileID: 2385225205265129808}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 10
   m_Center: {x: 0, y: 1.3475361, z: 0}
@@ -198,6 +203,7 @@ MonoBehaviour:
   _desiredLookDirection: {x: 0, y: 0, z: 0}
   _desiredRunDirection: {x: 0, y: 0, z: 0}
   _constantDrivingTorque: {x: 0, y: 0, z: 0}
+  _turningDirection: 0
 --- !u!114 &1935367941933725467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,7 +242,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 378663143a14c8e47a12ea7b54bd9644, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gs: {fileID: 0}
 --- !u!1001 &1966607071173781940
 PrefabInstance:
   m_ObjectHideFlags: 0
