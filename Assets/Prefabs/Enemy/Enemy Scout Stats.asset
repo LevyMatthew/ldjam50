@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 5
   runSpeed: 50
-  maxSpeed: 8
+  maxSpeed: 5
   turnSpeed: 0.2
   maxHealth: 100
   armor: 50

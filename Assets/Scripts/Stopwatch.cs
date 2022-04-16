@@ -12,16 +12,16 @@ public class Stopwatch : MonoBehaviour
 	public TextMeshProUGUI label;
 
 	void Start(){
-		EventManager.TransitionEvent += SetGameMode;
+		EventManager.TransitionEvent += OnTransition;
 	}
 
-	private void SetGameMode(int m){
+	private void OnTransition(int t){
 		//play game, start timer
-		if(m == 2){
+		if(t == 2){
 			Begin();
 		}
 		//game over, stop timer
-		else if(m == 3){
+		else if(t == 3){
 			Stop();
 		}
 	}
@@ -54,6 +54,6 @@ public class Stopwatch : MonoBehaviour
 	}
 
 	private void OnDisable(){
-		EventManager.TransitionEvent -= SetGameMode;
+		EventManager.TransitionEvent -= OnTransition;
 	}
 }

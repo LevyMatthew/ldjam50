@@ -9,13 +9,14 @@ public class UnitSpawner : MonoBehaviour
 
 	public List<GameObject> units;
 
-	private bool spawning = true;
+	public bool spawning;
 
 	float lastSpawnTime = 0.0f;
 	int totalSpawns = 0;
 
 	void Start(){
         EventManager.TransitionEvent += OnTransition;
+        EventManager.DespawnEvent += ResetSpawnCount;
         EventManager.DifficultyEvent += SetDifficulty;
     }
 
@@ -33,7 +34,6 @@ public class UnitSpawner : MonoBehaviour
     }
 
 	private void Begin(){
-		ResetSpawnCount();
 		spawning = true;
 	}
 
@@ -68,7 +68,6 @@ public class UnitSpawner : MonoBehaviour
     }
 
     private void SetDifficulty(int d){
-        print(d);
 		difficulty = difficultyOptions[d];
 	}
 
@@ -79,6 +78,8 @@ public class UnitSpawner : MonoBehaviour
 	}
 
 	private void OnDisable(){
-		EventManager.DifficultyEvent -= SetDifficulty;
-	}
+        EventManager.TransitionEvent -= OnTransition;
+        EventManager.DespawnEvent -= ResetSpawnCount;
+        EventManager.DifficultyEvent -= SetDifficulty;
+    }
 }

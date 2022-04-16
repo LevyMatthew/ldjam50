@@ -17,6 +17,7 @@ public class CameraController : MonoBehaviour
 	public Vector3 zoomAmount;
     public float zoomMax;
     public float zoomMin;
+    public Rect cameraBounds;
 
     public Vector3 newPosition;
 	public Quaternion newRotation;
@@ -26,6 +27,11 @@ public class CameraController : MonoBehaviour
 	public Vector3 dragCurrentPosition;
 	public Vector3 rotation;
 
+    private Vector3 initialPosition;
+    private Quaternion initialRotation;
+
+    public bool takingInput;
+
     float rotX = 0;
     float rotY = 0;
 
@@ -33,16 +39,42 @@ public class CameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        initialPosition = transform.position;
+        initialRotation = transform.rotation;
+        EventManager.TransitionEvent += OnTransition;
+        ResetCamera();
+    }
+
+    private void ResetCamera()
+    {
+        transform.position = initialPosition;
+        transform.rotation = initialRotation;
         newPosition = transform.position;
         newZoom = cameraTransform.localPosition;
         rotation = new Vector3(0, 0, 0);
     }
 
+    private void OnTransition(int t)
+    {
+        if(t == 2)
+        {
+            takingInput = true;
+            ResetCamera();
+        }
+        else
+        {
+            takingInput = false;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
-    	HandleMouseInput();
-        HandleMovementInput();
+        if (takingInput)
+        {
+            HandleMouseInput();
+            HandleMovementInput();
+        }
     }
 
     void HandleMouseInput(){
@@ -84,20 +116,28 @@ public class CameraController : MonoBehaviour
     		if(plane.Raycast(ray, out entry)){
     			dragCurrentPosition = ray.GetPoint(entry);
 
-    			newPosition = transform.position + dragStartPosition - dragCurrentPosition;
-    		}
-    	}
-
-    	if(Input.GetMouseButtonDown(1)){
-    		//rotateStartPosition = Input.mousePosition;
+                Vector3 next = transform.position + dragStartPosition - dragCurrentPosition;
+                if (next.x <= cameraBounds.xMin)
+                {
+                    next.x = cameraBounds.xMin;
+                }
+                if (next.x >= cameraBounds.xMax)
+                {
+                    next.x = cameraBounds.xMax;
+                }
+                if (next.z <= cameraBounds.yMin)
+                {
+                    next.z = cameraBounds.yMin;
+                }
+                if (next.z >= cameraBounds.yMax)
+                {
+                    next.z = cameraBounds.yMax;
+                }
+                newPosition = next;
+            }
     	}
 
     	if(Input.GetMouseButton(1)){
-            //rotateCurrentPosition = Input.mousePosition;
-
-            //Vector3 difference = rotateStartPosition - rotateCurrentPosition;
-
-            //rotateStartPosition = rotateCurrentPosition;
             float dx = Input.GetAxis("Mouse X") * rotationAmount;
             float dy = -Input.GetAxis("Mouse Y") * rotationAmount;
             rotX += dx;
@@ -187,5 +227,10 @@ public class CameraController : MonoBehaviour
     	transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * movementTime);
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(rotation), Time.deltaTime * movementTime);
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, newZoom, Time.deltaTime * movementTime);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.TransitionEvent -= OnTransition;
     }
 }

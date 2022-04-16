@@ -26,8 +26,11 @@ public class Hand : MonoBehaviour
 	GameObject statsGameObject;
 	Vector3 groundPos;
 
+    public bool takingInput;
+
 	void Start()
 	{
+        EventManager.TransitionEvent += OnTransition;
 		prevClickTime = new List<float>();
 		cooldownComplete = new List<bool>();
 		for(int i = 0; i < cooldownImage.Count; i++){
@@ -36,6 +39,29 @@ public class Hand : MonoBehaviour
 			cooldownImage[i].fillAmount = 0.0f;
 		}
 	}
+
+    private void ResetCooldowns()
+    {
+        for (int i = 0; i < cooldownImage.Count; i++)
+        {
+            prevClickTime[i] = 0.0f;
+            cooldownComplete[i] = true;
+            cooldownImage[i].fillAmount = 0.0f;
+        }
+    }
+
+    private void OnTransition(int t)
+    {
+        if(t == 2)
+        {
+            ResetCooldowns();
+            takingInput = true;
+        }
+        else
+        {
+            takingInput = false;
+        }
+    }
 
 	private Vector3 GetGroundPos(){
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -100,6 +126,10 @@ public class Hand : MonoBehaviour
 
 	void Update()
 	{
+        if (!takingInput)
+        {
+            return;
+        }
 		ManageCooldowns();
 		groundPos = GetGroundPos();
 		if(groundPos.y != -1){
@@ -119,4 +149,9 @@ public class Hand : MonoBehaviour
             }
         }
 	}
+
+    private void OnDisable()
+    {
+        EventManager.TransitionEvent -= OnTransition;
+    }
 }
