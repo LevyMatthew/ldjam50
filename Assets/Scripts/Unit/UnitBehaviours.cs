@@ -124,6 +124,21 @@ public class UnitBehaviours : ScriptableObject
             t = (deg - 120f) / 60f;
             intendedMoveDirection = Vector3.Lerp(a, b, t);
         }
+        else if (deg <= 0 && deg >= -60)
+        {
+            t = (deg + 60f) / 60f;
+            intendedMoveDirection = Vector3.Lerp(a, b, t);
+        }
+        else if (deg <= -60 && deg >= -120)
+        {
+            t = (deg + 120f) / 60f;
+            intendedMoveDirection = Vector3.Lerp(a, b, t);
+        }
+        else if (deg <= -120 && deg >= -180)
+        {
+            t = (deg + 180f) / 60f;
+            intendedMoveDirection = Vector3.Lerp(a, b, t);
+        }
 
         //units care more about the doors as they get closer to the centre
         float dist = seer.transform.position.magnitude;
