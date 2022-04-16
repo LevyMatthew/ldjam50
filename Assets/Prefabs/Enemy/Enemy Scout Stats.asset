@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Enemy Scout Stats
   m_EditorClassIdentifier: 
   walkSpeed: 5
-  runSpeed: 9
+  runSpeed: 50
+  maxSpeed: 8
   turnSpeed: 0.2
   maxHealth: 100
   armor: 50

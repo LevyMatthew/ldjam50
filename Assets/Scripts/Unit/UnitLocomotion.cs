@@ -11,17 +11,11 @@ public class UnitLocomotion : MonoBehaviour
     //Triggering animation system for cosmetic purposes
 
     private Vector3 _steerForce = default;
-    private Vector3 _steerTorque = default;
     private Rigidbody _rb;
 
     public void SetSteerForce(Vector3 steerForce)
     {
         _steerForce = steerForce;
-    }
-
-    public void SetSteerTorque(Vector3 steerTorque)
-    {
-        _steerTorque = steerTorque;
     }
 
     private void Awake()
@@ -31,7 +25,6 @@ public class UnitLocomotion : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rb.AddForce(_steerForce);
-        _rb.AddTorque(_steerTorque);
+        _rb.AddForce(_steerForce, ForceMode.Force);
     }
 }
